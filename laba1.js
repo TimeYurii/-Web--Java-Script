@@ -120,3 +120,4 @@ return message;
 }
 
 triangle(7, 'leg', 4, 'hypotenuse');
+triangle(60, "opposite angle", 5, "leg");
