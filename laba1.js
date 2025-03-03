@@ -119,5 +119,5 @@ if ((value1_type === "adjacent angle" && value2_type !== "leg") ||
 return message;
 }
 
-triangle(7, 'leg', 4, 'hypotenuse');
+triangle(7, 'leg', 8, 'hypotenuse');
 triangle(60, "opposite angle", 5, "leg");
