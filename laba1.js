@@ -37,10 +37,10 @@ function sideCheck(a, b, c) {
     if (a + b <= c || a + c <= b || b + c <= a || a >= c || b >= c) {
         return "Back to your IDE and change values, because triangle inequality is violated";
     }
-    if (a > 1000 || b > 1000 || c > 1000) {
-        return "Sides must be less than or equal to 1000";
+    if (a > 1000000 || b > 100000 || c > 100000) {
+        return "Sides must be less than or equal to 100000";
     }
-    if (a < 0.01 || b < 0.01 || c < 0.01) {
+    if (a < 0.000001 || b < 0.000001 || c < 0.000001) {
         return "Sides must be greater than or equal to 0.01";
     }
     return "";
