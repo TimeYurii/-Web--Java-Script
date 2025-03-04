@@ -34,11 +34,9 @@ function triangle(value1, value1_type, value2, value2_type) {
 }
 
 function sideCheck(a, b, c) {
-    if (a && b && c && (a + b <= c || a + c <= b || b + c <= a)) {
+    if (a + b <= c || a + c <= b || b + c <= a) {
         return "Back to your IDE and change values, because triangle inequality is violated";
     }
-    if (a && c && a >= c) return "Back to your IDE and change values, because triangle inequality is violated";
-    if (b && c && b >= c) return "Back to your IDE and change values, because triangle inequality is violated";
     return "";
 }
 
@@ -62,7 +60,7 @@ function calculate(a, b, c, alpha, beta) {
     } else if (c && alpha) {
         beta = 90 - alpha;
         a = c * Math.sin(alpha * (Math.PI / 180));
-        b = Math.sqrt(c * c - a * a);
+        b = c * Math.cos(alpha * (Math.PI / 180));
     } else if (a && beta) {
         b = a * Math.tan(beta * (Math.PI / 180));
         c = Math.sqrt(a * a + b * b);
@@ -79,7 +77,7 @@ function dataParse(value1, value1_type, value2, value2_type) {
     if (value1_type === "hypotenuse") c = value1;
     if (value2_type === "hypotenuse") c = value2;
     if (value1_type === "angle") alpha = value1;
-    if (value2_type === "angle") beta = value2;
+    if (value2_type === "angle") alpha = value2;
     if (value1_type === "opposite angle") alpha = value1;
     if (value2_type === "opposite angle") alpha = value2;
     if (value1_type === "adjacent angle") beta = value1;
@@ -103,11 +101,25 @@ function dataCheck(a, b, c, alpha, beta) {
 
 function typeCheck(value1, value1_type, value2, value2_type) {
     let message = "";
+    let validTypes = ["leg", "hypotenuse", "angle", "opposite angle", "adjacent angle"];
+
     if (value1 === "" || typeof value1 !== 'number') message += "Value1 is invalid\n";
     if (value2 === "" || typeof value2 !== 'number') message += "Value2 is invalid\n";
-    let validTypes = ["leg", "hypotenuse", "angle", "opposite angle", "adjacent angle"];
     if (!validTypes.includes(value1_type)) message += "Value1_type is invalid\n";
     if (!validTypes.includes(value2_type)) message += "Value2_type is invalid\n";
+
+    if ((value1_type === "angle" && value2_type !== "hypotenuse") ||
+        (value2_type === "angle" && value1_type !== "hypotenuse")) {
+        message += "Angle must be with hypotenuse\n";
+    }
+    if ((value1_type === "opposite angle" && value2_type !== "leg") ||
+        (value2_type === "opposite angle" && value1_type !== "leg")) {
+        message += "Opposite angle must be with leg\n";
+    }
+    if ((value1_type === "adjacent angle" && value2_type !== "leg") ||
+        (value2_type === "adjacent angle" && value1_type !== "leg")) {
+        message += "Adjacent angle must be with leg\n";
+    }
     return message;
 }
 
