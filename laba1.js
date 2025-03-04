@@ -34,14 +34,8 @@ function triangle(value1, value1_type, value2, value2_type) {
 }
 
 function sideCheck(a, b, c) {
-    if (a + b <= c || a + c <= b || b + c <= a || a >= c || b >= c) {
+    if ((a && b && c) && (a + b <= c || a + c <= b || b + c <= a || a >= c || b >= c)) {
         return "Back to your IDE and change values, because triangle inequality is violated";
-    }
-    if (a > 1000000 || b > 100000 || c > 100000) {
-        return "Sides must be less than or equal to 100000";
-    }
-    if (a < 0.000001 || b < 0.000001 || c < 0.000001) {
-        return "Sides must be greater than or equal to 0.01";
     }
     return "";
 }
@@ -69,6 +63,14 @@ function calculate(a, b, c, alpha, beta) {
         b = c * Math.cos(alpha * (Math.PI / 180));
     } else if (a && beta) {
         b = a * Math.tan(beta * (Math.PI / 180));
+        c = Math.sqrt(a * a + b * b);
+        alpha = 90 - beta;
+    } else if (b && alpha) {
+        a = b / Math.tan(alpha * (Math.PI / 180));
+        c = Math.sqrt(a * a + b * b);
+        beta = 90 - alpha;
+    } else if (b && beta) {
+        a = b / Math.tan(beta * (Math.PI / 180));
         c = Math.sqrt(a * a + b * b);
         alpha = 90 - beta;
     }
@@ -105,9 +107,9 @@ function dataParse(value1, value1_type, value2, value2_type) {
 
 function dataCheck(a, b, c, alpha, beta) {
     let message = "";
-    if (a && a <= 0) message += "Leg must be more than 0\n";
-    if (b && b <= 0) message += "Leg must be more than 0\n";
-    if (c && c <= 0) message += "Hypotenuse must be more than 0\n";
+    if (a && (a <= 0.000001 || a > 1000000)) message += "Leg must be between 0.01 and 1000\n";
+    if (b && (b <= 0.000001 || b > 1000000)) message += "Leg must be between 0.01 and 1000\n";
+    if (c && (c <= 0.000001 || c > 1000000)) message += "Hypotenuse must be between 0.01 and 1000\n";
     if ((alpha && (alpha <= 0 || alpha >= 90)) || (beta && (beta <= 0 || beta >= 90))) {
         message += "Angles must be between 1 and 89\n";
     }
@@ -126,19 +128,10 @@ function typeCheck(value1, value1_type, value2, value2_type) {
     if (!validTypes.includes(value1_type)) message += "Value1_type is invalid\n";
     if (!validTypes.includes(value2_type)) message += "Value2_type is invalid\n";
 
-    if ((value1_type === "angle" && value2_type !== "hypotenuse") ||
-        (value2_type === "angle" && value1_type !== "hypotenuse")) message += "Angle must be with hypotenuse\n";
-
-    if ((value1_type === "opposite angle" && value2_type !== "leg") ||
-        (value2_type === "opposite angle" && value1_type !== "leg")) message += "Opposite angle must be with leg\n";
-
-    if ((value1_type === "adjacent angle" && value2_type !== "leg") ||
-        (value2_type === "adjacent angle" && value1_type !== "leg")) message += "Adjacent angle must be with leg\n";
-
     return message;
 }
 
-triangle(0.000001, 'leg', 1000000, 'hypotenuse');
+triangle(7, 'leg', 8, 'hypotenuse');
 triangle(60, "opposite angle", 5, "leg");
 triangle(5, 'leg', 7, 'leg');
 triangle(5, 'leg', 30, 'adjacent angle');
