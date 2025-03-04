@@ -133,7 +133,6 @@ function typeCheck(value1, value1_type, value2, value2_type) {
 }
 
 triangle(7, 'leg', 8, 'hypotenuse');
-triangle(60, "opposite angle", 5, "leg");
 triangle(5, 'leg', 7, 'leg');
 triangle(5, 'leg', 30, 'adjacent angle');
 triangle(10, 'hypotenuse', 45, 'angle');
