@@ -34,10 +34,14 @@ function triangle(value1, value1_type, value2, value2_type) {
 }
 
 function sideCheck(a, b, c) {
-    if (a !== "Not applicable" && b !== "Not applicable" && c !== "Not applicable") {
-        if (a + b <= c) {
-            return "Back to your IDE and change values, because triangle inequality is violated";
-        }
+    if (a + b <= c || a + c <= b || b + c <= a || a >= c || b >= c) {
+        return "Back to your IDE and change values, because triangle inequality is violated";
+    }
+    if (a > 1000 || b > 1000 || c > 1000) {
+        return "Sides must be less than or equal to 1000";
+    }
+    if (a < 0.01 || b < 0.01 || c < 0.01) {
+        return "Sides must be greater than or equal to 0.01";
     }
     return "";
 }
@@ -134,7 +138,7 @@ function typeCheck(value1, value1_type, value2, value2_type) {
     return message;
 }
 
-triangle(7, 'leg', 8, 'hypotenuse');
+triangle(0.000001, 'leg', 1000000, 'hypotenuse');
 triangle(60, "opposite angle", 5, "leg");
 triangle(5, 'leg', 7, 'leg');
 triangle(5, 'leg', 30, 'adjacent angle');
