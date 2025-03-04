@@ -124,4 +124,4 @@ function typeCheck(value1, value1_type, value2, value2_type) {
 }
 
 triangle(7, 'leg', 8, 'hypotenuse');
-triangle(60, "opposite angle", 5, "leg");
+triangle(45, "opposite angle", 5, "leg");
