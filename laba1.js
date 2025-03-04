@@ -7,6 +7,11 @@ function triangle(value1, type1, value2, type2) {
         return "failed";
     }
 
+    if (value1 < 0.000001 || value1 > 1000000 || value2 < 0.000001 || value2 > 1000000) {
+        console.log("Values must be between 0.000001 and 1000000");
+        return "failed";
+    }
+
     let a, b, c, alpha, beta;
     const toRadians = (deg) => deg * Math.PI / 180;
     const toDegrees = (rad) => rad * 180 / Math.PI;
