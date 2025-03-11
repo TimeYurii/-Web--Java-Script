@@ -3,7 +3,7 @@ const car1 = new Object();
 car1.color = "Green";
 car1.maxSpeed = 300;
 car1.driver = {
-    name: "Bondar Kostiantyn", 
+    name: "Yurii Chasovshchykov", 
     category: "C",
     personalLimitations: "No driving at night"
 };
