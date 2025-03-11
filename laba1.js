@@ -1,8 +1,8 @@
-console.log("Використання: triangle(value1, type1, value2, type2)\nДе type: 'leg' (катет), 'hypotenuse' (гіпотенуза), 'adjacent angle' (прилеглий кут), 'opposite angle' (протилежний кут), 'angle' (гострий кут)");
+console.log("Using: triangle(value1, type1, value2, type2)\n type: 'leg' , 'hypotenuse' , 'adjacent angle' , 'opposite angle' , 'angle' ");
 function triangle(value1, type1, value2, type2) {
     
     if (value1 <= 0  value2 <= 0) {
-        console.log("Помилка: Значення повинні бути додатними.");
+        console.log("Error: Values ​​must be positive.");
         console.log("failed");
         return "failed";
     }
@@ -11,13 +11,13 @@ function triangle(value1, type1, value2, type2) {
     const max = 1000000;  
 
     if (value1 < min  value2 < min) {
-        console.log("Помилка: Значення надто малі для обчислень.");
+        console.log("Error: Values ​​too small for calculations.");
         console.log("failed");
         return "failed";
     }
     
     if (value1 > max  value2 > max) {
-        console.log("Помилка: Значення надто великі для реального трикутника.");
+        console.log("Error: Values ​​too large for a real triangle.");
         console.log("failed");
         return "failed";
     }
@@ -28,7 +28,7 @@ function triangle(value1, type1, value2, type2) {
     
     const validTypes = ["leg", "hypotenuse", "adjacent angle", "opposite angle", "angle"];
     if (!validTypes.includes(type1)  !validTypes.includes(type2)) {
-        console.log("Помилка: Невірні типи введених параметрів.");
+        console.log("Error: Invalid parameter types entered.");
         console.log("failed");
         return "failed";
     }
@@ -45,7 +45,7 @@ function triangle(value1, type1, value2, type2) {
         case type1 === "hypotenuse" && type2 === "leg":
             [a, c] = type1 === "leg" ? [value1, value2] : [value2, value1];
             if (a >= c) {
-                console.log("Помилка: Катет не може бути більше або рівний гіпотенузі.");
+                console.log("Error: The leg cannot be greater than or equal to the hypotenuse.");
                 console.log("failed");
                 return "failed";
             }
@@ -57,7 +57,7 @@ function triangle(value1, type1, value2, type2) {
         case type2 === "leg" && type1.includes("angle"):
             [a, alpha] = type1 === "leg" ? [value1, value2] : [value2, value1];
             if (alpha <= 0  alpha >= 90) {
-                console.log("Помилка: Кут повинен бути гострим (від 0° до 90°).");
+                console.log("Error: The angle must be acute (from 0° to 90°).");
                 console.log("failed");
                 return "failed";
             }
@@ -69,7 +69,7 @@ function triangle(value1, type1, value2, type2) {
         case type2 === "hypotenuse" && type1 === "angle":
             [c, alpha] = type1 === "hypotenuse" ? [value1, value2] : [value2, value1];
             if (alpha <= 0 || alpha >= 90) {
-                console.log("Помилка: Кут повинен бути гострим (від 0° до 90°).");
+                console.log("Error: The angle must be acute (from 0° to 90°).");
                 console.log("failed");
                 return "failed";
             }
@@ -78,7 +78,7 @@ function triangle(value1, type1, value2, type2) {
             b = c * Math.cos(toRadians(alpha));
             break;
         default:
-            console.log("Помилка: Невірні типи введених параметрів.");
+            console.log("Error: Invalid parameter types entered.");
             console.log("failed");
             return "failed";
     }
