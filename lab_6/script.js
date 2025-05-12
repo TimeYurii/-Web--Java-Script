@@ -3,7 +3,7 @@ let currentIndex = -1;
 let maps = [];
 
 function loadRandomMap() {
-  fetch('Map.json')
+  fetch('map.json')
     .then(response => response.json())
     .then(data => {
       maps = data.map(item => item.map);
