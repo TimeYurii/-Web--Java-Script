@@ -16,7 +16,7 @@ function loadRandomMap() {
       } while (newIndex === currentIndex);
 
       currentIndex = newIndex;
-      currentMap = JSON.parse(JSON.stringify(maps[currentIndex])); // Копія
+      currentMap = JSON.parse(JSON.stringify(maps[currentIndex]));
       moveCount = 0;
       lastClickedCell = null;
       renderMap(currentMap);
@@ -61,12 +61,14 @@ function renderMap(map) {
 }
 
 function toggleCell(row, col) {
-  // Перевірка: якщо клікнута та ж сама клітинка — не рахувати хід
+  // Перевірка на повторний клік по тій самій клітинці
   if (lastClickedCell && lastClickedCell.row === row && lastClickedCell.col === col) {
-    return;
+    return; // Не зараховуємо хід
   }
 
+  // Зберігаємо останню клітинку
   lastClickedCell = { row, col };
+
   moveCount++;
   updateMoveCounter();
 
@@ -107,9 +109,7 @@ function updateTimer() {
 
 function updateMoveCounter() {
   const moveElement = document.getElementById('moves');
-  if (moveElement) {
-    moveElement.textContent = 'Ходи: ' + moveCount;
-  }
+  moveElement.textContent = 'Ходи: ' + moveCount;
 }
 
 function checkWin() {
