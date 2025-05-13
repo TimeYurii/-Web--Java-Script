@@ -5,6 +5,9 @@ let maps = [];
 let moveCount = 0;
 let lastClickedCell = null;
 
+let timerInterval;
+let seconds = 0;
+
 function loadRandomMap() {
   fetch('Map.json')
     .then(response => response.json())
@@ -18,9 +21,10 @@ function loadRandomMap() {
       currentIndex = newIndex;
       currentMap = JSON.parse(JSON.stringify(maps[currentIndex]));
       moveCount = 0;
+      seconds = 0;
       lastClickedCell = null;
-      renderMap(currentMap);
       updateMoveCounter();
+      renderMap();
       startTimer();
     })
     .catch(error => console.error('Помилка при завантаженні карти:', error));
@@ -30,25 +34,28 @@ function loadMapFromJson() {
   if (currentIndex >= 0 && currentIndex < maps.length) {
     currentMap = JSON.parse(JSON.stringify(maps[currentIndex]));
     moveCount = 0;
+    seconds = 0;
     lastClickedCell = null;
-    renderMap(currentMap);
     updateMoveCounter();
+    renderMap();
     startTimer();
   }
 }
 
-function renderMap(map) {
+function renderMap() {
   const container = document.getElementById('game-container');
   container.innerHTML = '';
 
-  map.forEach((row, rowIndex) => {
+  currentMap.forEach((row, rowIndex) => {
     const rowElement = document.createElement('div');
     rowElement.classList.add('row');
 
     row.forEach((cell, colIndex) => {
       const cellElement = document.createElement('div');
       cellElement.classList.add('cell');
-      cellElement.classList.toggle('on', cell === 1);
+      if (cell === 1) {
+        cellElement.classList.add('on');
+      }
       cellElement.setAttribute('data-row', rowIndex);
       cellElement.setAttribute('data-col', colIndex);
       rowElement.appendChild(cellElement);
@@ -61,23 +68,24 @@ function renderMap(map) {
 }
 
 function toggleCell(row, col) {
-  // Перевірка на повторний клік по тій самій клітинці
-  if (lastClickedCell && lastClickedCell.row === row && lastClickedCell.col === col) {
-    return; // Не зараховуємо хід
+  const isSameCell = lastClickedCell &&
+    lastClickedCell.row === row &&
+    lastClickedCell.col === col;
+
+  if (!isSameCell) {
+    moveCount++;
+    updateMoveCounter();
+    lastClickedCell = { row, col };
   }
 
-  // Зберігаємо останню клітинку
-  lastClickedCell = { row, col };
-
-  moveCount++;
-  updateMoveCounter();
-
+  // Toggle clicked cell
   currentMap[row][col] = 1 - currentMap[row][col];
 
-  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-  directions.forEach(dir => {
-    const newRow = row + dir[0];
-    const newCol = col + dir[1];
+  // Toggle neighbors
+  const directions = [[0,1],[1,0],[0,-1],[-1,0]];
+  directions.forEach(([dx, dy]) => {
+    const newRow = row + dx;
+    const newCol = col + dy;
     if (
       newRow >= 0 && newRow < currentMap.length &&
       newCol >= 0 && newCol < currentMap[0].length
@@ -86,15 +94,18 @@ function toggleCell(row, col) {
     }
   });
 
-  renderMap(currentMap);
+  renderMap();
 }
 
-let timerInterval;
-let seconds = 0;
+function updateMoveCounter() {
+  const movesEl = document.getElementById('moves');
+  if (movesEl) {
+    movesEl.textContent = 'Ходи: ' + moveCount;
+  }
+}
 
 function startTimer() {
   clearInterval(timerInterval);
-  seconds = 0;
   updateTimer();
   timerInterval = setInterval(() => {
     seconds++;
@@ -103,30 +114,29 @@ function startTimer() {
 }
 
 function updateTimer() {
-  const timerElement = document.getElementById('timer');
-  timerElement.textContent = 'Час: ' + seconds + ' с';
-}
-
-function updateMoveCounter() {
-  const moveElement = document.getElementById('moves');
-  moveElement.textContent = 'Ходи: ' + moveCount;
+  const timerEl = document.getElementById('timer');
+  if (timerEl) {
+    timerEl.textContent = 'Час: ' + seconds + ' с';
+  }
 }
 
 function checkWin() {
   const allZero = currentMap.every(row => row.every(cell => cell === 0));
   if (allZero) {
     clearInterval(timerInterval);
-    setTimeout(() => alert(`Ти виграв за ${moveCount} ходів і ${seconds} секунд!`), 100);
+    setTimeout(() => {
+      alert(`Ти виграв за ${moveCount} ходів і ${seconds} секунд!`);
+    }, 100);
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   loadRandomMap();
 
   document.getElementById('restart-button').addEventListener('click', loadRandomMap);
   document.getElementById('newgame-button').addEventListener('click', loadMapFromJson);
 
-  document.getElementById('game-container').addEventListener('click', function (event) {
+  document.getElementById('game-container').addEventListener('click', (event) => {
     if (event.target.classList.contains('cell')) {
       const row = parseInt(event.target.getAttribute('data-row'));
       const col = parseInt(event.target.getAttribute('data-col'));
