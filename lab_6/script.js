@@ -2,6 +2,9 @@ let currentMap;
 let currentIndex = -1;
 let maps = [];
 
+let moveCount = 0;
+let lastClickedCell = null;
+
 function loadRandomMap() {
   fetch('Map.json')
     .then(response => response.json())
@@ -14,7 +17,10 @@ function loadRandomMap() {
 
       currentIndex = newIndex;
       currentMap = JSON.parse(JSON.stringify(maps[currentIndex])); // Копія
+      moveCount = 0;
+      lastClickedCell = null;
       renderMap(currentMap);
+      updateMoveCounter();
       startTimer();
     })
     .catch(error => console.error('Помилка при завантаженні карти:', error));
@@ -23,7 +29,10 @@ function loadRandomMap() {
 function loadMapFromJson() {
   if (currentIndex >= 0 && currentIndex < maps.length) {
     currentMap = JSON.parse(JSON.stringify(maps[currentIndex]));
+    moveCount = 0;
+    lastClickedCell = null;
     renderMap(currentMap);
+    updateMoveCounter();
     startTimer();
   }
 }
@@ -52,6 +61,15 @@ function renderMap(map) {
 }
 
 function toggleCell(row, col) {
+  // Перевірка: якщо клікнута та ж сама клітинка — не рахувати хід
+  if (lastClickedCell && lastClickedCell.row === row && lastClickedCell.col === col) {
+    return;
+  }
+
+  lastClickedCell = { row, col };
+  moveCount++;
+  updateMoveCounter();
+
   currentMap[row][col] = 1 - currentMap[row][col];
 
   const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
@@ -87,11 +105,18 @@ function updateTimer() {
   timerElement.textContent = 'Час: ' + seconds + ' с';
 }
 
+function updateMoveCounter() {
+  const moveElement = document.getElementById('moves');
+  if (moveElement) {
+    moveElement.textContent = 'Ходи: ' + moveCount;
+  }
+}
+
 function checkWin() {
   const allZero = currentMap.every(row => row.every(cell => cell === 0));
   if (allZero) {
     clearInterval(timerInterval);
-    setTimeout(() => alert('Ти виграв!'), 100);
+    setTimeout(() => alert(`Ти виграв за ${moveCount} ходів і ${seconds} секунд!`), 100);
   }
 }
 
