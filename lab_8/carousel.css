@@ -9,27 +9,28 @@
   display: flex;
   transition: transform 0.5s ease-in-out;
   width: 100%;
+  gap: 10px; 
 }
 
 .slides img {
   width: 100%;
   max-width: 400px;
   height: auto;
+  margin: 0 5px; 
 }
 
 .slides img:first-child {
-  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .slides img:last-child {
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .slides img:hover {
   transform: scale(1.04);
   transition: transform 0.3s;
 }
-
 
 .slide {
   min-width: 100%;
